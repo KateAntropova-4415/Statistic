@@ -1,13 +1,14 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import stats
+from scipy.stats import stats, norm
+import scipy.stats as sps
 from statsmodels.stats import power as pwr
 
 
-def plot(data1, data2):
+def plot(control_data, test_data):
     plt.figure(figsize=(8, 6))
-    plt.plot(data1, label='Data 1')
-    plt.plot(data2, label='Data 2')
+    plt.plot(control_data, label='Control group')
+    plt.plot(test_data, label='Test group')
     plt.title('Сравнение двух шумных рядов')
     plt.xlabel('Номер точки данных')
     plt.ylabel('Значение')
@@ -15,41 +16,36 @@ def plot(data1, data2):
     plt.grid(True)
     plt.show()
 
-
-
-def t_test(data1, data2, alpha):
-    t_stat, p_value = stats.ttest_ind(data1, data2)
+def t_test(control_data, test_data, alpha):
+    t_stat, p_value = stats.ttest_ind(control_data, test_data)
     print(f"Значение t-статистики: {t_stat}")
     print(f"p-value: {p_value}")
     if p_value < alpha:
-        print("Разница между средними значима")
+        print("РЕЗУЛЬТАТ: Существует статистически значимая разница в доходах между контрольной и тестовой группами.")
+        if test_data.mean() > control_data.mean():
+            print("РЕЗУЛЬТАТ: тестовая группа привела к увеличению доходов.")
+        else:
+            print("РЕЗУЛЬТАТ: Контрольная группа получила более высокие доходы.")
+        #print("Разница между средними значима")
     else:
-        print("Разница между средними не значима")
+        print("РЕЗУЛЬТАТ: Статистически значимой разницы в доходах между контрольной и тестовой группами нет.")
+        #print("Разница между средними не значима")
 
-def mean_12(data1, data2):
-    print("Среднее для data1:", data1.mean())
-    print("Среднее для data2: ", data2.mean())
+def mean_12(control_data, test_data):
+    print("Среднее для контрольной группы:", control_data.mean())
+    print("Среднее для тестовой группы: ", test_data.mean())
+
+# вот квантили, а как их сравнивать
+def quantiles(control_data, test_data, q):
+    print('Квантили контрольной группы:', np.quantile(control_data, q))
+    print('Квантили тестовой группы:', np.quantile(test_data, q))
 
 
-def size(data1, data2, alpha, power):
-    # Calculate conversion rate mean and std
-    data1_mean = data1.mean()
-    data1_std = data1.std()
+# кринж функция, я пока не знаю как нормально определить размер выборки и как правильно её сузить
+def size(control_data, test_data, alpha, power):
+    min_sample_size = min(len(control_data), len(test_data))
 
-    # Setting the parameters and we want to increase the purchase_mean to 0.1 in this experiment
-    effect_size = (0.1 - data1_mean) / data1_std
-
-    # Calculate ratio
-    test_n = len(data2)
-    cont_n = len(data1)
-    sizes = [cont_n, test_n]
-    ratio = max(sizes) / min(sizes)
-
-    # Initialize analysis and calculate sample size
-    analysis = pwr.TTestIndPower()
-    ssresult = analysis.solve_power(effect_size=effect_size, power=power, alpha=alpha, nobs1=None, ratio=ratio)
-
-    print(f'Sample Size: {int(ssresult)}')
+    print(f'Min sample Size: {min_sample_size}')
 
 
 # проверка статистической значимости I
