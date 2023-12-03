@@ -1,7 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import stats, norm
+from scipy.stats import stats, norm, kstest
+from scipy.stats import shapiro
 import scipy.stats as sps
+from scipy.stats._morestats import ShapiroResult
 from statsmodels.stats import power as pwr
 
 
@@ -46,6 +48,45 @@ def size(control_data, test_data, alpha, power):
     min_sample_size = min(len(control_data), len(test_data))
 
     print(f'Min sample Size: {min_sample_size}')
+
+def shapiro_kolmog(control_data, test_data, alpha):
+    res = shapiro(control_data)
+    print("Тест Шапиро-Уилка для определения нормальности распределения выборок")
+    print("Проверка контрольной группы:")
+    print(res)
+    if res.pvalue < alpha:
+        print("Выборка контрольной группы вполне возможно не является результатом нормального распределения по тесту Шапиро-Уилка")
+    else:
+        print("Выборка контрольной группы является результатом нормального распрделения по тесту Шапиро-Уилка")
+
+    res1 = shapiro(test_data)
+    print("Проверка тестовой группы:")
+    print(res1)
+    if res1.pvalue < alpha:
+        print("Выборка тестовой группы вполне возможно не является результатом нормального распределения по тесту Шапиро-Уилка")
+    else:
+        print("Выборка тестовой группы является результатом нормального распрделения по тесту Шапиро-Уилка")
+
+    print("Тест Колмогорова-Смирнова для определения распределения выборок, соответствующего логарифмически нормальному")
+    print("Проверка контрольной группы:")
+    kres = kstest(control_data, 'norm')
+    print(kres)
+    if kres.pvalue < alpha:
+        print(
+            "Выборка контрольной группы вполне возможно не является результатом логарифмически нормального распределения по тесту Колмогорова-Смирнова")
+    else:
+        print("Выборка контрольной группы является результатом логарифмически нормального распрделения по тесту Колмогорова-Смирнова")
+
+    k1res = kstest(test_data, 'norm')
+    print("Проверка тестовой группы:")
+    print(k1res)
+    if k1res.pvalue < alpha:
+        print(
+            "Выборка тестовой группы вполне возможно не является результатом логарифмически нормального распределения по тесту Колмогорова-Смирнова")
+    else:
+        print(
+            "Выборка тестовой группы является результатом логарифмически нормального распрделения по тесту Колмогорова-Смирнова")
+
 
 
 # проверка статистической значимости I
