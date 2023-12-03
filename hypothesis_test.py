@@ -1,10 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import stats, norm, kstest
 from scipy.stats import shapiro
-import scipy.stats as sps
-from scipy.stats._morestats import ShapiroResult
-from statsmodels.stats import power as pwr
+from scipy.stats import stats, kstest
 
 
 def plot(control_data, test_data):
@@ -88,7 +85,9 @@ def shapiro_kolmog(control_data, test_data, alpha):
         print(
             "Выборка тестовой группы является результатом логарифмически нормального распрделения по тесту Колмогорова-Смирнова")
 
-
+    plt.hist(control_data, edgecolor='black', bins=20, label='Control group')
+    plt.hist(test_data, edgecolor='yellow', bins=20, label='Test group')
+    plt.show()
 
 # проверка статистической значимости I
 # Теперь, когда у нас есть интуитивное представление о статистической значимости и p-значениях, мы применим его к данным о результатах нашего тестирования.
