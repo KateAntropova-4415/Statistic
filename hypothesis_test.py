@@ -8,7 +8,7 @@ def plot(control_data, test_data):
     plt.figure(figsize=(8, 6))
     plt.plot(control_data, label='Control group')
     plt.plot(test_data, label='Test group')
-    plt.title('Сравнение двух шумных рядов')
+    plt.title('Сравнение двух рядов')
     plt.xlabel('Номер точки данных')
     plt.ylabel('Значение')
     plt.legend()
@@ -35,16 +35,16 @@ def mean_12(control_data, test_data):
     print("Среднее для тестовой группы: ", test_data.mean())
 
 # вот квантили, а как их сравнивать
-def quantiles(control_data, test_data, q):
-    print('Квантили контрольной группы:', np.quantile(control_data, q))
-    print('Квантили тестовой группы:', np.quantile(test_data, q))
+#def quantiles(control_data, test_data, q):
+#    print('Квантили контрольной группы:', np.quantile(control_data, q))
+#    print('Квантили тестовой группы:', np.quantile(test_data, q))
 
 
 # кринж функция, я пока не знаю как нормально определить размер выборки и как правильно её сузить
-def size(control_data, test_data, alpha, power):
-    min_sample_size = min(len(control_data), len(test_data))
+#def size(control_data, test_data, alpha, power):
+#    min_sample_size = min(len(control_data), len(test_data))
 
-    print(f'Min sample Size: {min_sample_size}')
+#    print(f'Min sample Size: {min_sample_size}')
 
 def shapiro_kolmog(control_data, test_data, alpha):
     res = shapiro(control_data)
